@@ -4,6 +4,7 @@ var fs = require("fs");
 var Data = require("./data");
 var moment = require("moment");
 var utils = require("./utils");
+var constants = require("./constants");
 
 
 describe("All data", function() {
@@ -69,6 +70,71 @@ describe("All data", function() {
         utils.outputAllErrors(errors);
       });
     });
+  });
+
+  describe("in ships.js", function() {
+    it("should have factions matching the ones on pilots.js", function() {
+      var pilotFactions = {};
+      var errors = [];
+      var shipFactions, i, j;
+
+      for (i = 0; i < Data.pilots.length; i++) {
+        if (!pilotFactions[Data.pilots[i].ship]) {
+          pilotFactions[Data.pilots[i].ship] = [];
+        }
+        if (pilotFactions[Data.pilots[i].ship].indexOf(Data.pilots[i].faction) === -1) {
+          pilotFactions[Data.pilots[i].ship].push(Data.pilots[i].faction);
+        }
+      }
+
+      for (i = 0; i < Data.ships.length; i++) {
+        shipFactions = Data.ships[i].faction.slice();
+        pilotFactions[Data.ships[i].name];
+
+        for (j = 0; j < shipFactions.length; j++) {
+          if (pilotFactions[Data.ships[i].name].indexOf(shipFactions[j]) === -1) {
+            errors.push(
+              utils.buildDataHeader(Data, "ships", i) +
+              ": has extra faction '" + shipFactions[j] + "'"
+            );
+          }
+        }
+
+        for (j = 0; j < pilotFactions[Data.ships[i].name].length; j++) {
+          if (shipFactions.indexOf(pilotFactions[Data.ships[i].name][j]) === -1) {
+            errors.push(
+              utils.buildDataHeader(Data, "ships", i) +
+              ": is missing faction '" + pilotFactions[Data.ships[i].name][j] + "'"
+            );
+          }
+        }
+      }
+
+      utils.outputAllErrors(errors);
+    })
+  });
+
+  describe("in pilots.js", function() {
+    it("reference ships that exists in ships.js", function() {
+      var shipNames = [];
+      var errors = [];
+      var  i;
+
+      for (i = 0; i < Data.ships.length; i++) {
+        shipNames.push(Data.ships[i].name);
+      }
+
+      for (i = 0; i < Data.pilots.length; i++) {
+        if (shipNames.indexOf(Data.pilots[i].ship) === -1) {
+          errors.push(
+            utils.buildDataHeader(Data, "pilots", i) +
+            ": ship '" + Data.pilots[i].ship + "' does not exists in ships.js"
+          );
+        }
+      }
+
+      utils.outputAllErrors(errors);
+    })
   });
 
   describe("that has an image file path", function() {

@@ -1,20 +1,10 @@
 var assert = require("assert");
 
-
-var DATASET_HEADER_MAP = {
-  conditions: "Condition",
-  damageDeckCore: "DamageDeckCore",
-  damageDeckCoreTfa: "DamageDeckCore",
-  pilots: "Pilot",
-  referenceCards: "ReferenceCard",
-  ships: "Ship",
-  sources: "Source",
-  upgrades: "Upgrade",
-};
+var constants = require("./constants");
 
 function buildDataHeader(data, dataKey, index) {
   var dataHeader;
-  var header = DATASET_HEADER_MAP[dataKey];
+  var header = constants.DATASET_HEADER_MAP[dataKey];
   var model = data[dataKey][index];
 
   if (typeof model.id !== "undefined" && model.name) {

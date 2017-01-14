@@ -1,7 +1,7 @@
 var assert = require("assert");
 
 var Data = require("./data");
-var Keywords = require("./keywords");
+var constants = require("./constants");
 var utils = require("./utils");
 
 /**
@@ -64,19 +64,19 @@ function validateKeywords(dataKey, keywords, textFields) {
 describe("All card text fields", function() {
   describe("in conditions.js", function() {
     it("should use allowed keywords only", function() {
-      validateKeywords("conditions", Keywords.all, ['text']);
+      validateKeywords("conditions", constants.KEYWORDS.all, ['text']);
     });
   });
 
   describe("in pilots.js", function() {
     it("should use allowed keywords only", function() {
-      validateKeywords("pilots", Keywords.all, ['text']);
+      validateKeywords("pilots", constants.KEYWORDS.all, ['text']);
     });
   });
 
   describe("in upgrades.js", function() {
     it("should use allowed keywords only", function() {
-      validateKeywords("upgrades", Keywords.all, ['text', 'effect']);
+      validateKeywords("upgrades", constants.KEYWORDS.all, ['text', 'effect']);
     });
   });
 });
